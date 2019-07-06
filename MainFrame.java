@@ -16,12 +16,15 @@ import java.sql.SQLException;
  */
 public class MainFrame extends JFrame {
     public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(() -> {
-            try {
-                MainFrame test = new MainFrame();
-                test.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    MainFrame test = new MainFrame();
+                    test.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -61,14 +64,22 @@ public class MainFrame extends JFrame {
         this.setLayout(new BorderLayout());
         this.loadData = new JButton("读取数据");
         this.loadData.setVerticalTextPosition(AbstractButton.CENTER);
-        loadData.addActionListener(e -> {
-            System.out.println("load data button");
-            load();
+        loadData.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("load data button");
+                MainFrame.this.load();
+            }
         });
 
         this.exit = new JButton("退出");
         this.exit.setVerticalTextPosition(AbstractButton.CENTER);
-        this.exit.addActionListener(e -> System.exit(0));
+        this.exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
         panelUp.add(this.loadData);
         panelUp.add(this.exit);
         panelUp.setSize(Constants.MAIN_WINDOW_WIDTH, Constants.MAIN_WINDOW_HEIGHT / 10);
@@ -82,36 +93,39 @@ public class MainFrame extends JFrame {
         this.queryField = new JTextField();
         this.queryField.setPreferredSize(new Dimension(Constants.MAIN_WINDOW_WIDTH / 10, Constants.MAIN_WINDOW_HEIGHT / 30));
         this.query = new JButton("查询");
-        this.query.addActionListener(e->{
-            String key = this.queryField.getText();
-            boolean status = false;
+        this.query.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String key = MainFrame.this.queryField.getText();
+                boolean status = false;
 
-            if(this.datas == null){
-                JOptionPane.showMessageDialog(null,
-                        "请先点击读取数据按钮，获取数据",
-                        "提示", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-            for(String[] line : this.datas){
-                if(line[0].equals(key)){
-                    status = true;
+                if (MainFrame.this.datas == null) {
                     JOptionPane.showMessageDialog(null,
-                            "姓名：" + line[1]
-                            + ", 数学" + line[2]
-                            + ", 英语" + line[3]
-                            + ", 计算机" + line[4]
-                            + ", 总分" + line[5],
-                            "学生：" + key + "的成绩信息", JOptionPane.INFORMATION_MESSAGE);
+                            "请先点击读取数据按钮，获取数据",
+                            "提示", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                for (String[] line : MainFrame.this.datas) {
+                    if (line[0].equals(key)) {
+                        status = true;
+                        JOptionPane.showMessageDialog(null,
+                                "姓名：" + line[1]
+                                        + ", 数学" + line[2]
+                                        + ", 英语" + line[3]
+                                        + ", 计算机" + line[4]
+                                        + ", 总分" + line[5],
+                                "学生：" + key + "的成绩信息", JOptionPane.INFORMATION_MESSAGE);
+
+                    }
+                }
+                if (!status) {
+                    JOptionPane.showMessageDialog(null,
+                            "查无此人",
+                            "查询条件错误", JOptionPane.INFORMATION_MESSAGE);
 
                 }
-            }
-            if(!status){
-                JOptionPane.showMessageDialog(null,
-                        "查无此人",
-                        "查询条件错误", JOptionPane.INFORMATION_MESSAGE);
 
             }
-
         });
 
 

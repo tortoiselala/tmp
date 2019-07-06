@@ -12,7 +12,7 @@ public class StudentInfoLoader {
         BufferedReader reader = new BufferedReader(fileReader);
         String line = null;
         int lineCounter = 0;
-        List<Student> resultSet = new LinkedList<>();
+        List<Student> resultSet = new LinkedList<Student>();
         while((line = reader.readLine()) != null){
             lineCounter++;
             resultSet.add(parser(line, lineCounter));
